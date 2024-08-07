@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Password Strength Checker</h1>
+        <form id="passwordForm">
+            <label for="password">Enter a 4-digit or 6-digit password:</label>
+            <input type="text" id="password" name="password" required>
+            <button type="submit">Check</button>
+        </form>
+        <p id="result"></p>
+        <button id="showWeakPasswords">Show Weak Passwords</button>
+        <div id="weakPasswords" style="display:none;">
+            <h2>Weak 4-digit Passwords:</h2>
+            <ul id="weak4DigitPasswords"></ul>
+            <h2>Weak 6-digit Passwords:</h2>
+            <ul id="weak6DigitPasswords"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
