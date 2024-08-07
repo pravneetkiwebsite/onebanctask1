@@ -1,16 +1,13 @@
-// List of common weak passwords
 const weakPasswords = new Set(['1234', '1111', '0000', '1212', '7777', 
-                                '123456', '111111', '000000', '121212', '777777']);
+                               '123456', '111111', '000000', '121212', '777777']);
 
-// Example dates (format: MMDD for 4 digits, MMDDYY for 6 digits)
-const dobSelf4 = "0101";     // Example: January 1st
-const dobSpouse4 = "0202";   // Example: February 2nd
-const anniversary4 = "0315"; // Example: March 15th
-const dobSelf6 = "010190";   // Example: January 1st, 1990
-const dobSpouse6 = "020290"; // Example: February 2nd, 1990
-const anniversary6 = "031590"; // Example: March 15th, 1990
+const dobSelf4 = "0101";     
+const dobSpouse4 = "0202";   
+const anniversary4 = "0315";  
+const dobSelf6 = "010190";     
+const dobSpouse6 = "020290";   
+const anniversary6 = "031590";  
 
-// Add these dates to the weak passwords set
 weakPasswords.add(dobSelf4);
 weakPasswords.add(dobSpouse4);
 weakPasswords.add(anniversary4);
@@ -19,7 +16,7 @@ weakPasswords.add(dobSpouse6);
 weakPasswords.add(anniversary6);
 
 function generateSequentialPasswords(length) {
-    const sequentialPasswords = [];
+    let sequentialPasswords = [];
     for (let i = 0; i <= 10 - length; i++) {
         let seq = '';
         for (let j = i; j < i + length; j++) {
@@ -33,31 +30,11 @@ function generateSequentialPasswords(length) {
 }
 
 function generateRepeatedPasswords(length) {
-    const repeatedPasswords = [];
+    let repeatedPasswords = [];
     for (let i = 0; i < 10; i++) {
         repeatedPasswords.push(i.toString().repeat(length));
     }
     return repeatedPasswords;
-}
-
-function showWeakPasswords() {
-    let allWeakPasswords = new Set(weakPasswords);
-    
-    // Generate and add sequential and repeated passwords
-    generateSequentialPasswords(4).forEach(pwd => allWeakPasswords.add(pwd));
-    generateSequentialPasswords(6).forEach(pwd => allWeakPasswords.add(pwd));
-    generateRepeatedPasswords(4).forEach(pwd => allWeakPasswords.add(pwd));
-    generateRepeatedPasswords(6).forEach(pwd => allWeakPasswords.add(pwd));
-    
-    // Separate into 4-digit and 6-digit passwords
-    const weak4Digit = Array.from(allWeakPasswords).filter(pwd => pwd.length === 4).sort();
-    const weak6Digit = Array.from(allWeakPasswords).filter(pwd => pwd.length === 6).sort();
-    
-    console.log("Weak 4-digit passwords:");
-    weak4Digit.forEach(pwd => console.log(pwd));
-    
-    console.log("\nWeak 6-digit passwords:");
-    weak6Digit.forEach(pwd => console.log(pwd));
 }
 
 function isSequential(password) {
@@ -81,18 +58,39 @@ function checkPasswordStrength(password) {
     return "Strong";
 }
 
-function main() {
-    const password = prompt("Enter a 4-digit or 6-digit password: ");
-    if (/^\d{4}|\d{6}$/.test(password)) {
-        const strength = checkPasswordStrength(password);
-        alert(`The password '${password}' is ${strength}.`);
-    } else {
-        alert("Please enter a valid 4-digit or 6-digit password.");
-    }
-}
+document.getElementById('passwordForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const password = document.getElementById('password').value;
+    const result = checkPasswordStrength(password);
+    document.getElementById('result').textContent = `The password '${password}' is ${result}.`;
+});
 
-// Run the main function
-main();
+document.getElementById('showWeakPasswords').addEventListener('click', function() {
+    const weakPasswordsDiv = document.getElementById('weakPasswords');
+    weakPasswordsDiv.style.display = 'block';
 
-// Optional: Show weak passwords (for testing purposes)
-showWeakPasswords();
+    const allWeakPasswords = new Set(weakPasswords);
+    allWeakPasswords.add(...generateSequentialPasswords(4));
+    allWeakPasswords.add(...generateSequentialPasswords(6));
+    allWeakPasswords.add(...generateRepeatedPasswords(4));
+    allWeakPasswords.add(...generateRepeatedPasswords(6));
+
+    const weak4Digit = Array.from(allWeakPasswords).filter(pwd => pwd.length === 4).sort();
+    const weak6Digit = Array.from(allWeakPasswords).filter(pwd => pwd.length === 6).sort();
+
+    const weak4DigitList = document.getElementById('weak4DigitPasswords');
+    weak4DigitList.innerHTML = '';
+    weak4Digit.forEach(pwd => {
+        const li = document.createElement('li');
+        li.textContent = pwd;
+        weak4DigitList.appendChild(li);
+    });
+
+    const weak6DigitList = document.getElementById('weak6DigitPasswords');
+    weak6DigitList.innerHTML = '';
+    weak6Digit.forEach(pwd => {
+        const li = document.createElement('li');
+        li.textContent = pwd;
+        weak6DigitList.appendChild(li);
+    });
+});
